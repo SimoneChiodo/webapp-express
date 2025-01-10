@@ -3,14 +3,11 @@ const express = require("express");
 const router = express.Router();
 
 // IMPORT CONTROLLER
-const { index } = require("../controllers/moviesController");
+const { index, show } = require("../controllers/moviesController");
 
 // REGISTERING ROUTES
-router.get("/", (req, res) => {
-    res.json({
-        message: "ok",
-    });
-});
+router.get("/", index);
+router.get("/:id", show);
 
 // EXPORT
 module.exports = router;
