@@ -2,7 +2,14 @@
 const express = require("express");
 const app = express();
 
+// INIT ENV
+const { APP_HOST, APP_PORT } = process.env;
+
+//REGISTERING ROUTES
+const moviesRouter = require("./routers/moviesRouter");
+app.use(moviesRouter);
+
 // SERVER LISTENING
-app.listen(DB_PORT, () => {
-    console.log("Server listening at http://localhost:3000");
+app.listen(APP_PORT, () => {
+    console.log(`Server listening at http://${APP_HOST}:${APP_PORT}`);
 });
