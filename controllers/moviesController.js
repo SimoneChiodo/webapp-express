@@ -48,11 +48,12 @@ function show(req, res) {
         // Check Errors
         checkQueryErrors(err);
 
+        // Check if ID is correct
+        if (!results || results.length === 0)
+            return res.status(404).json("Movie not found");
+
         // Adding Correct Image Path
         results = { ...results[0], image: completeImagePath(results[0].image) };
-
-        // Check if ID is correct
-        if (!results) return res.status(404).json("Movie not found");
 
         connection.query(reviewsSql, [id], (err, reviewsResults) => {
             // Check Errors
