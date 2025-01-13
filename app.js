@@ -3,11 +3,19 @@ const express = require("express");
 const app = express();
 
 // INIT ENV
-const { APP_HOST, APP_PORT } = process.env;
+const { APP_HOST, APP_PORT, APP_FRONTEND_URL } = process.env;
+
+// CORS CONFIG
+const cors = require("cors");
+let corsOptions = {
+    origin: APP_FRONTEND_URL,
+    optionsSuccessStatus: 200,
+};
 
 // REGISTERING MIDDLEWARES
 app.use(express.json());
 app.use(express.static("public"));
+app.use(cors(corsOptions));
 
 // REGISTERING ROUTES
 const moviesRouter = require("./routers/moviesRouter");
