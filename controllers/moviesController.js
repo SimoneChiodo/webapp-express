@@ -18,7 +18,7 @@ function index(req, res) {
 
     connection.query(sql, (err, results) => {
         // Check Errors
-        checkQueryErrors(err);
+        checkQueryErrors(err, results);
 
         // Adding Correct Image Path
         results = results.map((movie) => ({
@@ -46,18 +46,18 @@ function show(req, res) {
 
     connection.query(sql, [id], (err, results) => {
         // Check Errors
-        checkQueryErrors(err);
+        checkQueryErrors(err, results);
 
         // Check if ID is correct
         if (!results || results.length === 0)
-            return res.status(404).json("Movie not found");
+            return res.status(404).json({ error: "Movie not found" });
 
         // Adding Correct Image Path
         results = { ...results[0], image: completeImagePath(results[0].image) };
 
         connection.query(reviewsSql, [id], (err, reviewsResults) => {
             // Check Errors
-            checkQueryErrors(err);
+            checkQueryErrors(err, reviewsResults);
 
             // Adding Reviews
             results.reviews = reviewsResults;
@@ -74,7 +74,7 @@ function completeImagePath(imageName) {
 }
 
 // FZ CHECK QUERY ERROR
-function checkQueryErrors(err) {
+function checkQueryErrors(err, res) {
     if (err) {
         console.log(err);
 
