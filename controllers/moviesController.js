@@ -5,6 +5,7 @@ const connection = require("../db/conn");
 const { APP_HOST, APP_PORT } = process.env;
 
 // CRUD METHODS
+//SHOW ALL MOVIES
 function index(req, res) {
     const sql = "SELECT * FROM movies";
     const reviewsSql = `SELECT r.name as review_name, 
@@ -31,6 +32,7 @@ function index(req, res) {
     });
 }
 
+//SHOW ONE MOVIE
 function show(req, res) {
     const id = parseInt(req.params.id);
     const sql = "SELECT * FROM movies WHERE id = ?";
@@ -68,6 +70,24 @@ function show(req, res) {
     });
 }
 
+//STORE A NEW REVIEW
+function storeReview(req, res) {
+    const id = parseInt(req.params.id);
+    const name = req.body.name;
+    const vote = parseInt(req.body.vote);
+    const text = req.body.text;
+    const sql = `INSERT INTO reviews (movie_id, name, vote, text) 
+    VALUES (?,?,?,?)`;
+
+    connection.query(sql, [id, name, vote, text], (err) => {
+        // Check Errors
+        checkQueryErrors(err, res);
+
+        // Return
+        res.json({ message: "Review added" });
+    });
+}
+
 // FZ COMPLETE IMAGE PATH
 function completeImagePath(imageName) {
     return `${APP_HOST}:${APP_PORT}/img/movies_cover/${imageName}`;
@@ -83,4 +103,4 @@ function checkQueryErrors(err, res) {
 }
 
 // EXPORT
-module.exports = { index, show };
+module.exports = { index, show, storeReview };
